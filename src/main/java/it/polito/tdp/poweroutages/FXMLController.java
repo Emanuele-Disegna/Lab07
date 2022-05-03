@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import it.polito.tdp.poweroutages.model.Model;
 import it.polito.tdp.poweroutages.model.Nerc;
+import it.polito.tdp.poweroutages.model.PowerOutage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -39,6 +40,39 @@ public class FXMLController {
     @FXML
     void doRun(ActionEvent event) {
     	txtResult.clear();
+    	int anni = 0;
+    	int ore = 0;
+    	Nerc nerc = cmbNerc.getValue();
+    	
+    	try {
+    		anni = Integer.parseInt(txtYears.getText());
+    		ore = Integer.parseInt(txtHours.getText());
+    	} catch(NumberFormatException e) {
+    		e.printStackTrace();
+    		System.out.println("Inserire dei valori numerici per anni e ore");
+    	}
+    	
+    	if(anni>14 || anni<1) {
+    		System.out.println("Inserire un numero di anni compreso tra 1 e 14");
+    	}
+    	
+    	if(ore<0) {
+    		System.out.println("Inserire un numero di ore positivo");
+    	}
+    	
+    	if(nerc==null) {
+    		System.out.println("Selezionare un Nerc dalla lista");
+    	}
+    	
+    	int count = 0;
+    	for(PowerOutage p : this.model.trovaSequenza(anni, ore, nerc)) {
+    		if(count==0) {
+    			txtResult.appendText("Totale utenti coinvolti: " + this.model.getMaxCustomers() + "\n");
+    			count++;
+    		}
+    		txtResult.appendText(p+"\n");
+    	}
+    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -54,5 +88,9 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	
+    	for(Nerc n : this.model.getNercList()) {
+        	cmbNerc.getItems().add(n);
+        }
     }
 }

@@ -18,6 +18,10 @@ public class TestPowerOutagesDAO {
 		} catch (Exception e) {
 			System.err.println("Test FAILED");
 		}
+		
+		PowerOutageDAO pp = new PowerOutageDAO();
+		
+		
 
 	}
 
