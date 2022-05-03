@@ -27,15 +27,15 @@ public class Model {
 
 	public List<PowerOutage> trovaSequenza(int anni, int ore, Nerc nerc) {
 		List<PowerOutage> parziale = new ArrayList<PowerOutage>();
-		String res = "";
 		tutti = podao.getPowerOutages(nerc);
 		
-		trovaSequenzaRicorsiva(anni, ore, 0, parziale);
+		trovaSequenzaRicorsiva(anni, ore, parziale);
 		maxCustomers = sommaUtentiCoinvolti(migliore);
+		
 		return migliore;
 	}
 	
-	private void trovaSequenzaRicorsiva(int anni, int ore, int livello, List<PowerOutage> parziale) {
+	private void trovaSequenzaRicorsiva(int anni, int ore, List<PowerOutage> parziale) {
 		if(!controlloOreEAnni(anni, ore, parziale)) {
 			//Se fallisco questo controllo allora parziale non è una soluzione accettabile
 			return;
@@ -51,7 +51,7 @@ public class Model {
 		for(int i=0; i<tutti.size(); i++) {
 			if(!parziale.contains(tutti.get(i))) {
 				parziale.add(tutti.get(i));
-				trovaSequenzaRicorsiva(anni, ore, livello+1, parziale);
+				trovaSequenzaRicorsiva(anni, ore, parziale);
 				parziale.remove(tutti.get(i));
 			}else {
 				return;
